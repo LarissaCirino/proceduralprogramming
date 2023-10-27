@@ -7,13 +7,11 @@ struct student {
 };
 
 int main () {
-    struct student new_student = {
-        .name = "Name Surname", 
-        .student_id = "28932123", 
-        .mark= 35
-    };
-    printf("Student name: %s\n", new_student.name);
-    printf("Student ID:   %s\n", new_student.student_id);
-    printf("Final mark:   %u\n", new_student.mark);
-    return 0;
+    struct student new_student= {
+    printf("Insert data [name, id, mark]\n")};
+
+    scanf("%s", *&new_student.name);
+    scanf("%s", *&new_student.student_id);
+    scanf("%d", &new_student.mark);
+return 0;
 }
