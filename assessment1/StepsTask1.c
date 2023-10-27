@@ -43,6 +43,8 @@ void tokeniseRecord(const char *input, const char *delimiter,
 
 // Complete the main function
 int main() {
-
+// read in file
+// use tokeniserecord
+// printout
 
 }
