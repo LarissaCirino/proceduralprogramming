@@ -12,7 +12,6 @@ typedef struct {
 // Define any additional variables here
 
 
-
 // This is your helper function. Do not change it in any way.
 // Inputs: character array representing a row; the delimiter character
 // Ouputs: date character array; time character array; steps character array
@@ -43,19 +42,20 @@ void tokeniseRecord(const char *input, const char *delimiter,
 
 // Complete the main function
 int main() {
+
 // read in file
-int main() {
     char FITNESS_DATA [] = "data.txt";
     FILE *file = fopen (FITNESS_DATA, "r");
     if (file == NULL) {
-        perror("");
+        perror("error");
         return 1;
     }
 
-    int buffer_size = 100
+    int buffer_size = 60;
     char line_buffer[buffer_size];
     while (fgets(line_buffer, buffer_size, file) != NULL) {
         printf("%s", line_buffer);
+        printf("%c\n", FITNESS_DATA[buffer_size]);
     }
 
     fclose (file);
@@ -67,4 +67,4 @@ int main() {
 
 // printout
 
-}
+
