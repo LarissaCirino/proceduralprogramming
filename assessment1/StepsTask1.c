@@ -44,18 +44,23 @@ void tokeniseRecord(const char *input, const char *delimiter,
 int main() {
 
 // read in file
-    char FITNESS_DATA [] = "data.txt";
-    FILE *file = fopen (FITNESS_DATA, "r");
+    char fitnessdata [] = "FitnessData_2023.csv";
+    FILE *file = fopen (fitnessdata, "r");
     if (file == NULL) {
         perror("error");
         return 1;
     }
 
-    int buffer_size = 60;
+    int buffer_size = 10000, i;
     char line_buffer[buffer_size];
+    FITNESS_DATA records[buffer_size];
     while (fgets(line_buffer, buffer_size, file) != NULL) {
-        printf("%s", line_buffer);
-        printf("%c\n", FITNESS_DATA[buffer_size]);
+        tokeniseRecord (line_buffer, ",", records[buffer_size].date, records[buffer_size].time, records[buffer_size].steps);
+
+        printf("Number of records in file:%d\n", buffer_size);
+        for (i=buffer_size; i<3; i++){
+            printf("%s", line_buffer);
+        }
     }
 
     fclose (file);
