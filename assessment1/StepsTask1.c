@@ -11,7 +11,6 @@ typedef struct {
 
 // Define any additional variables here
 
-
 // This is your helper function. Do not change it in any way.
 // Inputs: character array representing a row; the delimiter character
 // Ouputs: date character array; time character array; steps character array
@@ -57,10 +56,13 @@ int main() {
     while (fgets(line_buffer, buffer_size, file) != NULL) {
         tokeniseRecord (line_buffer, ",", records[buffer_size].date, records[buffer_size].time, records[buffer_size].steps);
 
-        printf("Number of records in file:%d\n", buffer_size);
-        for (i=buffer_size; i<3; i++){
-            printf("%s", line_buffer);
-        }
+
+    }
+
+    printf("Number of records in file:%d\n", buffer_size);
+    printf("%s", records[buffer_size].date);
+    for (i=buffer_size; i<3; i++){
+        printf("%s", line_buffer);
     }
 
     fclose (file);
