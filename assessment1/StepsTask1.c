@@ -61,7 +61,7 @@ int main() {
 
     }
 
-    printf("Number of records in file:%d\n",buffer_size );
+    printf("Number of records in file: %d\n",buffer_size );
     //printf("%s", records[buffer_size].date);
     for (i=0; i<3; i++){
         printf("%s/%s/%d\n", records[i].date, records[i].time, records[i].steps);
