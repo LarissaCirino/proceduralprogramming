@@ -15,7 +15,7 @@ typedef struct {
 // Inputs: character array representing a row; the delimiter character
 // Ouputs: date character array; time character array; steps character array
 void tokeniseRecord(const char *input, const char *delimiter,
-                    char *date, char *time, char *steps) {
+                    char *date, char *time, int *steps) {
     // Create a copy of the input string as strtok modifies the string
     char *inputCopy = strdup(input);
     
@@ -31,7 +31,9 @@ void tokeniseRecord(const char *input, const char *delimiter,
     
     token = strtok(NULL, delimiter);
     if (token != NULL) {
-        strcpy(steps, token);
+        char step[10];
+        strcpy(step, token);
+        *steps= atoi(step);
     }
     
     // Free the duplicated string
@@ -50,19 +52,19 @@ int main() {
         return 1;
     }
 
-    int buffer_size = 10000, i;
-    char line_buffer[buffer_size];
-    FITNESS_DATA records[buffer_size];
-    while (fgets(line_buffer, buffer_size, file) != NULL) {
-        tokeniseRecord (line_buffer, ",", records[buffer_size].date, records[buffer_size].time, records[buffer_size].steps);
-
+    int buffer_size = 0, i;
+    char line_buffer[100];
+    FITNESS_DATA records[100];
+    while (fgets(line_buffer, 100, file) != NULL) {
+        tokeniseRecord (line_buffer, ",", records[buffer_size].date, records[buffer_size].time, &records[buffer_size].steps);
+        buffer_size= buffer_size+1;
 
     }
 
-    printf("Number of records in file:%d\n", buffer_size);
-    printf("%s", records[buffer_size].date);
-    for (i=buffer_size; i<3; i++){
-        printf("%s", line_buffer);
+    printf("Number of records in file:%d\n",buffer_size );
+    //printf("%s", records[buffer_size].date);
+    for (i=0; i<3; i++){
+        printf("%s/%s/%d\n", records[i].date, records[i].time, records[i].steps);
     }
 
     fclose (file);
