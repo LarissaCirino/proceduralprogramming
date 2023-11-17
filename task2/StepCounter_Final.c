@@ -8,12 +8,14 @@
 // Define any additional variables here
 // Global variables for filename and FITNESS_DATA array
 
+int buffer_size=1000;
+
 
 // This is your helper function. Do not change it in any way.
 // Inputs: character array representing a row; the delimiter character
 // Ouputs: date character array; time character array; steps character array
 void tokeniseRecord(const char *input, const char *delimiter,
-                    char *date, char *time, char *steps) {
+                    char *date, char *time, int *steps) {
     // Create a copy of the input string as strtok modifies the string
     char *inputCopy = strdup(input);
     
@@ -28,8 +30,10 @@ void tokeniseRecord(const char *input, const char *delimiter,
     }
     
     token = strtok(NULL, delimiter);
-    if (token != NULL) {
-        strcpy(steps, token);
+    if (token != NULL) {;
+        char step[10];
+        strcpy(step, token);
+        *steps=atoi(step);
     }
     
     // Free the duplicated string
@@ -38,16 +42,14 @@ void tokeniseRecord(const char *input, const char *delimiter,
                     }
 
 
-
-
 // Complete the main function
 
 int main()
 {
-    // array of 
-    FITNESS_DATA records[100]; //ver briefing
+    // array of
+    FITNESS_DATA records[1000]; 
 
-    char line[buffer_size];
+    char line_buffer[buffer_size];
     char filename[buffer_size];
 
     // get filename from the user
@@ -56,8 +58,8 @@ int main()
     // these lines read in a line from the stdin (where the user types)
     // and then takes the actual string out of it
     // this removes any spaces or newlines.
-    fgets(line, buffer_size, stdin);
-    sscanf(line, " %s ", filename);
+    fgets(line_buffer, buffer_size, stdin);
+    sscanf(line_buffer, " %s ", filename);
 
     char choice;
     int counter = 0;
@@ -70,10 +72,10 @@ int main()
         return 1;
     }
 
-    while (fgets(line_buffer, 100, file) != NULL) 
+    while (fgets(line_buffer, 1000, input) != NULL) 
     {    
-        tokeniseRecord (line_buffer, ",", records[buffer_size].date, records[buffer_size].time, &records[buffer_size].steps);
-        buffer_size++;
+       tokeniseRecord (line_buffer,",", records[counter].date, records[counter].time, &records[buffer_size].steps);
+        counter++;
 
     };
 
@@ -81,7 +83,6 @@ int main()
 
     while (1)
     {
-
 
     printf("%s\n","Menu Options:");
     printf("%s\n","A: Specify the filename to be imported");
@@ -103,18 +104,18 @@ int main()
 
     // scanf("%s", &choice); oq eu tinha colocado antes de 13/11
 
-    switch(choice)
-    {
+    switch (choice)
+    { 
         case 'A': 
         case 'a':
                 printf("%s","Filename to be imported: ");
-                scanf("%s", &filename);
-                FILE *file = fopen (filename, "r");
-                if (file == NULL) {
-                    perror("Error: could not open file");
-                    return 1;
-                };
+                //scanf("%s", &filename);
+                //FILE *file = fopen (filename, "r");
+                //if (file == NULL) {
+                //    perror("Error: could not open file");
+                //    return 1;
             break;
+            
         case 'B':
         case 'b':
                 //char fitnessdata [] = "FitnessData_2023.csv";
@@ -129,20 +130,20 @@ int main()
             break;
         case 'C':
         case 'c':
-            printf("Fewest steps: %s %s", records[i].date, records[i].time);
+            printf("Fewest steps: %s %s", records[counter].date, records[counter].time);
             break;
         case 'D': 
         case 'd':
-            printf("Largest steps: %s %s", records[i].date, records[i].time);
+            printf("Largest steps: %s %s", records[counter].date, records[counter].time);
             break;
         case 'E': 
         case 'e':
-            printf("Mean step count: ")
+            printf("Mean step count: ");
             break;
         case 'F': 
         case 'f':
-                printf("Longest period start: %s %s", records[i].date, records[i].time);
-                printf("Longest period end: %s %s", records[i].date, records[i].time);
+                printf("Longest period start: %s %s", records[counter].date, records[counter].time);
+                printf("Longest period end: %s %s", records[counter].date, records[counter].time);
                 break;
         case 'Q':
         case 'q': 
