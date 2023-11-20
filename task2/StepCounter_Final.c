@@ -8,14 +8,13 @@
 // Define any additional variables here
 // Global variables for filename and FITNESS_DATA array
 
-int buffer_size=1000;
 
 
 // This is your helper function. Do not change it in any way.
 // Inputs: character array representing a row; the delimiter character
 // Ouputs: date character array; time character array; steps character array
 void tokeniseRecord(const char *input, const char *delimiter,
-                    char *date, char *time, int *steps) {
+                    char *date, char *time, char *steps) {
     // Create a copy of the input string as strtok modifies the string
     char *inputCopy = strdup(input);
     
@@ -47,7 +46,8 @@ void tokeniseRecord(const char *input, const char *delimiter,
 int main()
 {
     // array of
-    FITNESS_DATA records[1000]; 
+    int buffer_size=10000,i;
+    FITNESS_DATA records[buffer_size]; 
 
     char line_buffer[buffer_size];
     char filename[buffer_size];
@@ -64,22 +64,25 @@ int main()
     char choice;
     int counter = 0;
     float mean = 0;
+    int stepcount = 0;
+    char tempsteps[1000];
 
-    FILE *input = fopen(filename, "r");
-    if (!input)
+    FILE *file = fopen(filename, "r");
+    if (file == NULL)
     {
         printf("Error: File could not be opened\n");
         return 1;
     }
 
-    while (fgets(line_buffer, 1000, input) != NULL) 
+
+    while (fgets(line_buffer, buffer_size, file) != NULL) 
     {    
-       tokeniseRecord (line_buffer,",", records[counter].date, records[counter].time, &records[buffer_size].steps);
+       tokeniseRecord (line_buffer,",", records[counter].date, records[counter].time, tempsteps);
         counter++;
 
     };
-
-    fclose(input);
+    //string to steps; atoi integer on steps and then coloca records.step= a isso
+    fclose(file);
 
     while (1)
     {
@@ -109,46 +112,55 @@ int main()
         case 'A': 
         case 'a':
                 printf("%s","Filename to be imported: ");
-                //scanf("%s", &filename);
+                scanf("%s", filename);
                 //FILE *file = fopen (filename, "r");
-                //if (file == NULL) {
-                //    perror("Error: could not open file");
-                //    return 1;
+                if (file == NULL) {
+                    perror("Error: could not open file");
+                    return 1;
+                };
             break;
             
         case 'B':
         case 'b':
-                //char fitnessdata [] = "FitnessData_2023.csv";
-                //FILE *file = fopen (fitnessdata, "r");
-                // seek(file,0) and close the file
-
-                //int buffer_size = 0, i;
-                //char line_buffer[100];
-                //FITNESS_DATA records[100];
-
-                printf("Number of records in the file: %d", buffer_size);
+                printf("Number of records in the file: %d\n", counter);
             break;
+
         case 'C':
         case 'c':
-            printf("Fewest steps: %s %s", records[counter].date, records[counter].time);
+            stepcount=10000;
+            for (i=0; i<buffer_size; i++)
+            {   
+                printf("%d",records[i].steps);
+                if (records[i].steps<stepcount){
+                    stepcount=records[i].steps;
+            }
+            };
+            //printf("Fewest steps: %s %s", records[i].date, records[i].time);
             break;
+
         case 'D': 
         case 'd':
             printf("Largest steps: %s %s", records[counter].date, records[counter].time);
             break;
+
         case 'E': 
         case 'e':
-            printf("Mean step count: ");
+            mean += records[counter].steps;
+            mean /= counter;
+            printf("Mean step count: %.2f\n", mean);
             break;
+
         case 'F': 
         case 'f':
                 printf("Longest period start: %s %s", records[counter].date, records[counter].time);
                 printf("Longest period end: %s %s", records[counter].date, records[counter].time);
                 break;
+
         case 'Q':
         case 'q': 
                 return 0;
                 break;
+
         default: 
             printf("%s\n","Invalid choice.Try again.");
             break;
