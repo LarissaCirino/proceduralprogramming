@@ -30,9 +30,10 @@ void tokeniseRecord(const char *input, const char *delimiter,
     
     token = strtok(NULL, delimiter);
     if (token != NULL) {;
-        char step[10];
-        strcpy(step, token);
-        *steps=atoi(step);
+        //char stepcount[1000];
+        strcpy(steps, token);
+        //*steps=atoi(stepcount);
+    
     }
     
     // Free the duplicated string
@@ -46,7 +47,7 @@ void tokeniseRecord(const char *input, const char *delimiter,
 int main()
 {
     // array of
-    int buffer_size=10000,i;
+    int buffer_size=10000;
     FITNESS_DATA records[buffer_size]; 
 
     char line_buffer[buffer_size];
@@ -63,6 +64,7 @@ int main()
 
     char choice;
     int counter = 0;
+    int i=0;
     float mean = 0;
     int stepcount = 0;
     char tempsteps[1000];
@@ -74,15 +76,23 @@ int main()
         return 1;
     }
 
+    
+
 
     while (fgets(line_buffer, buffer_size, file) != NULL) 
     {    
-       tokeniseRecord (line_buffer,",", records[counter].date, records[counter].time, tempsteps);
-        counter++;
-
+       tokeniseRecord (line_buffer,",", records[i].date, records[i].time, tempsteps);
+        i++;
+        
     };
+
+
     //string to steps; atoi integer on steps and then coloca records.step= a isso
     fclose(file);
+
+    //printf("%s | %s | %s | (%d) \n", tempsteps, &records.date, &records.time, i );
+    //records[i].steps= atoi(tempsteps);
+    //printf("%d | %s | %s | (%d) \n", records[i].steps, records[i].date, records[i].time, i );
 
     while (1)
     {
@@ -128,19 +138,35 @@ int main()
         case 'C':
         case 'c':
             stepcount=10000;
-            for (i=0; i<buffer_size; i++)
-            {   
-                printf("%d",records[i].steps);
-                if (records[i].steps<stepcount){
+            int fewest_i= 0;
+            for (i=0; i<counter; i++)
+            {
+                            printf("%d %d %s %s %d \n",i,counter, records[i].date, records[i].time, records[i].steps);
+
+                if (records[i].steps<stepcount)
+                {
                     stepcount=records[i].steps;
+                    fewest_i=i;
+                    printf("Counter: %d\n",i);
+                    printf("steps: %d\n", records[i].steps);
             }
-            };
-            //printf("Fewest steps: %s %s", records[i].date, records[i].time);
+           }
+            //printf("%d\n",records[i].steps);
+            printf("Fewest steps: %s %s %d %d\n", records[fewest_i].date, records[fewest_i].time, stepcount, fewest_i);
             break;
 
         case 'D': 
         case 'd':
-            printf("Largest steps: %s %s", records[counter].date, records[counter].time);
+            stepcount=0;
+                for (i=1; i<counter+1; i++)
+                {
+                    if (records[i].steps>stepcount)
+                    {
+                        stepcount=records[i].steps;
+                }
+            };
+
+            printf("Largest steps: %d %s %s", stepcount, records[counter].date, records[counter].time);
             break;
 
         case 'E': 
