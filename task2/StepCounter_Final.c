@@ -8,6 +8,7 @@
 // Define any additional variables here
 // Global variables for filename and FITNESS_DATA array
 
+    char tempsteps[10000];
 
 
 // This is your helper function. Do not change it in any way.
@@ -30,10 +31,7 @@ void tokeniseRecord(const char *input, const char *delimiter,
     
     token = strtok(NULL, delimiter);
     if (token != NULL) {;
-        //char stepcount[1000];
-        strcpy(steps, token);
-        //*steps=atoi(stepcount);
-    
+        strcpy(steps, token);    
     }
     
     // Free the duplicated string
@@ -64,10 +62,9 @@ int main()
 
     char choice;
     int counter = 0;
-    int i=0;
+    int i = 0;
     float mean = 0;
     int stepcount = 0;
-    char tempsteps[1000];
 
     FILE *file = fopen(filename, "r");
     if (file == NULL)
@@ -76,23 +73,18 @@ int main()
         return 1;
     }
 
-    
-
-
     while (fgets(line_buffer, buffer_size, file) != NULL) 
     {    
-       tokeniseRecord (line_buffer,",", records[i].date, records[i].time, tempsteps);
-        i++;
-        
-    };
+       tokeniseRecord (line_buffer,",", records[counter].date, records[counter].time, tempsteps);
+        records[counter].steps= atoi(tempsteps);
+        //printf("%d  %s | %s | %s | (%d) \n", records[counter].steps, tempsteps, records[counter].date, records[counter].time, counter);
+        counter++;
 
+    };
 
     //string to steps; atoi integer on steps and then coloca records.step= a isso
     fclose(file);
 
-    //printf("%s | %s | %s | (%d) \n", tempsteps, &records.date, &records.time, i );
-    //records[i].steps= atoi(tempsteps);
-    //printf("%d | %s | %s | (%d) \n", records[i].steps, records[i].date, records[i].time, i );
 
     while (1)
     {
@@ -123,11 +115,21 @@ int main()
         case 'a':
                 printf("%s","Filename to be imported: ");
                 scanf("%s", filename);
-                //FILE *file = fopen (filename, "r");
+                FILE *file = fopen (filename, "r");
                 if (file == NULL) {
                     perror("Error: could not open file");
                     return 1;
                 };
+                while (fgets(line_buffer, buffer_size, file) != NULL) 
+                {    
+                    tokeniseRecord (line_buffer,",", records[counter].date, records[counter].time, tempsteps);
+                    records[counter].steps= atoi(tempsteps);
+                    counter++;
+
+    };
+
+    //string to steps; atoi integer on steps and then coloca records.step= a isso
+    fclose(file);
             break;
             
         case 'B':
@@ -139,38 +141,34 @@ int main()
         case 'c':
             stepcount=10000;
             int fewest_i= 0;
-            for (i=0; i<counter; i++)
-            {
-                            printf("%d %d %s %s %d \n",i,counter, records[i].date, records[i].time, records[i].steps);
-
+            for (i=0; i<counter; i++){
                 if (records[i].steps<stepcount)
                 {
                     stepcount=records[i].steps;
                     fewest_i=i;
-                    printf("Counter: %d\n",i);
-                    printf("steps: %d\n", records[i].steps);
             }
-           }
-            //printf("%d\n",records[i].steps);
-            printf("Fewest steps: %s %s %d %d\n", records[fewest_i].date, records[fewest_i].time, stepcount, fewest_i);
+        }
+            printf("Fewest steps: %s %s\n", records[fewest_i].date, records[fewest_i].time);
             break;
 
         case 'D': 
         case 'd':
             stepcount=0;
-                for (i=1; i<counter+1; i++)
+            int largest_i= 0;
+                for (i=0; i<counter; i++)
                 {
                     if (records[i].steps>stepcount)
                     {
                         stepcount=records[i].steps;
+                        largest_i=i;
                 }
-            };
-
-            printf("Largest steps: %d %s %s", stepcount, records[counter].date, records[counter].time);
+            }
+            printf("Largest steps: %s %s\n", records[largest_i].date, records[largest_i].time);
             break;
 
         case 'E': 
         case 'e':
+        //loop?
             mean += records[counter].steps;
             mean /= counter;
             printf("Mean step count: %.2f\n", mean);
