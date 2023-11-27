@@ -124,12 +124,10 @@ int main()
                 {    
                     tokeniseRecord (line_buffer,",", records[counter].date, records[counter].time, tempsteps);
                     records[counter].steps= atoi(tempsteps);
+                    counter=0;
                     counter++;
-
     };
-
-    //string to steps; atoi integer on steps and then coloca records.step= a isso
-    fclose(file);
+                fclose(file);
             break;
             
         case 'B':
@@ -168,14 +166,28 @@ int main()
 
         case 'E': 
         case 'e':
-        //loop?
-            mean += records[counter].steps;
-            mean /= counter;
+            i=0;
+            i++;
+            mean=0;
+            mean += records[i].steps;
+            mean /= i;
             printf("Mean step count: %.2f\n", mean);
             break;
 
         case 'F': 
         case 'f':
+            stepcount=500;
+            i=0;
+            i++;
+            while (records[i].steps>stepcount){
+             // if(diferenca entre is for a maior eh o maior periodo acima de 500)
+                    {
+                        stepcount=records[i].steps;
+                        largest_i=i;
+                }
+            }  
+            } 
+
                 printf("Longest period start: %s %s", records[counter].date, records[counter].time);
                 printf("Longest period end: %s %s", records[counter].date, records[counter].time);
                 break;
