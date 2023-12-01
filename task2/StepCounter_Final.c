@@ -65,6 +65,7 @@ int main()
     int i = 0;
     float mean = 0;
     int stepcount = 0;
+    
 
     FILE *file = fopen(filename, "r");
     if (file == NULL)
@@ -171,27 +172,46 @@ int main()
             mean=0;
             mean += records[i].steps;
             mean /= i;
-            printf("Mean step count: %.2f\n", mean);
+            printf("Mean step count: %f \n", mean);
             break;
 
         case 'F': 
         case 'f':
-            stepcount=500;
-            i=0;
-            i++;
-            while (records[i].steps>stepcount){
-             // if(diferenca entre is for a maior eh o maior periodo acima de 500)
-                    {
-                        stepcount=records[i].steps;
-                        largest_i=i;
-                }
-            }  
-            } 
+        {
+            int first_i= 0;
+            int last_i= 0;
+            int period= last_i - first_i;
+            int longest_period= 0;
 
-                printf("Longest period start: %s %s", records[counter].date, records[counter].time);
-                printf("Longest period end: %s %s", records[counter].date, records[counter].time);
+            for (i=0; i<counter; i++)
+            {
+                if (records[i].steps>500){
+                    first_i=i;
+                    printf("steps: %d i: %d %d last i: %d\n", records[i].steps, i, first_i, last_i);
+                };
+               /* if else {
+                    last_i=i;
+                    printf("firsti: %d last i: %d\n",first_i, last_i);   
+                    };*/
+
+                    };
+
+
+                /*first_i=i;
+                for(i=0;i<counter;i++){
+                    last_i=i;
+                    if (period>longest_period){
+                        longest_period=period;
+                    }
+                }*/
+
+    
+            //printf("start: %d end: %d period: %d", first_i, last_i, longest_period);
+
+             //   printf("Longest period start: %s %s", records[first_i].date, records[first_i].time);
+               // printf("Longest period end: %s %s", records[last_i].date, records[last_i].time);
                 break;
-
+        };
         case 'Q':
         case 'q': 
                 return 0;
