@@ -53,7 +53,7 @@ int main()
     char choice;
     int i = 0;
     int counter= 0;
-    int mean= 0;
+    int meansteps= 0;
     int stepcount = 0;
 
     while (1)
@@ -89,11 +89,11 @@ int main()
                 sscanf(line_buffer, " %s ", filename);
                 FILE *file = fopen (filename, "r");
                 if (file == NULL) {
-                    perror("Error: could not find or open the file");
+                    perror("Error: Could not find or open the file.");
                     return 1;
                 }
                 else{
-                    printf("File successfully loaded.\n");
+                    printf("%s\n","File successfully loaded.");
                 };
                 while (fgets(line_buffer, buffer_size, file) != NULL) 
                 {    
@@ -106,7 +106,7 @@ int main()
             
         case 'B':
         case 'b':
-                printf("Total of records: %d\n", counter);
+                printf("Total records: %d\n", counter);
             break;
 
         case 'C':
@@ -140,12 +140,11 @@ int main()
 
         case 'E': 
         case 'e':
-            mean=0;
             for (i=0;i<counter;i++){
-                mean += records[i].steps;
+                meansteps += records[i].steps;
             }
-            mean /= counter;
-            printf("Mean step count: %d\n", mean);
+            meansteps /= counter;
+            printf("Mean step count: %d\n", meansteps);
             break;
 
         case 'F': 
@@ -187,7 +186,7 @@ int main()
                 break;
 
         default: 
-            printf("%s\n","Invalid choice.Try again.");
+            printf("%s\n","Invalid choice. Try again.");
             break;
     };
 };
