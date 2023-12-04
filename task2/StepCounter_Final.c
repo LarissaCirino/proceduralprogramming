@@ -50,42 +50,11 @@ int main()
 
     char line_buffer[buffer_size];
     char filename[buffer_size];
-
-    // get filename from the user
-    printf("Please enter the name of the data file: ");
-
-    // these lines read in a line from the stdin (where the user types)
-    // and then takes the actual string out of it
-    // this removes any spaces or newlines.
-    fgets(line_buffer, buffer_size, stdin);
-    sscanf(line_buffer, " %s ", filename);
-
     char choice;
-    int counter = 0;
     int i = 0;
-    float mean = 0;
+    int counter= 0;
+    float mean= 0;
     int stepcount = 0;
-    
-
-    FILE *file = fopen(filename, "r");
-    if (file == NULL)
-    {
-        printf("Error: File could not be opened\n");
-        return 1;
-    }
-
-    while (fgets(line_buffer, buffer_size, file) != NULL) 
-    {    
-       tokeniseRecord (line_buffer,",", records[counter].date, records[counter].time, tempsteps);
-        records[counter].steps= atoi(tempsteps);
-        //printf("%d  %s | %s | %s | (%d) \n", records[counter].steps, tempsteps, records[counter].date, records[counter].time, counter);
-        counter++;
-
-    };
-
-    //string to steps; atoi integer on steps and then coloca records.step= a isso
-    fclose(file);
-
 
     while (1)
     {
@@ -108,14 +77,16 @@ int main()
     // as otherwise this will stay in the stdin and be read next time
     while (getchar() != '\n');
 
-    // scanf("%s", &choice); oq eu tinha colocado antes de 13/11
-
     switch (choice)
     { 
         case 'A': 
         case 'a':
                 printf("%s","Filename to be imported: ");
-                scanf("%s", filename);
+                // these lines read in a line from the stdin (where the user types)
+                // and then takes the actual string out of it
+                // this removes any spaces or newlines.
+                fgets(line_buffer, buffer_size, stdin);
+                sscanf(line_buffer, " %s ", filename);
                 FILE *file = fopen (filename, "r");
                 if (file == NULL) {
                     perror("Error: could not open file");
@@ -125,7 +96,6 @@ int main()
                 {    
                     tokeniseRecord (line_buffer,",", records[counter].date, records[counter].time, tempsteps);
                     records[counter].steps= atoi(tempsteps);
-                    counter=0;
                     counter++;
     };
                 fclose(file);
@@ -172,7 +142,7 @@ int main()
             mean=0;
             mean += records[i].steps;
             mean /= i;
-            printf("Mean step count: %f \n", mean);
+            printf("Mean step count: %.0f \n", mean);
             break;
 
         case 'F': 
@@ -180,37 +150,33 @@ int main()
         {
             int first_i= 0;
             int last_i= 0;
-            int period= last_i - first_i;
-            int longest_period= 0;
+            int firstnew_i= 0;
+            int lastnew_i= 0;
+            int newseq= 0;
 
             for (i=0; i<counter; i++)
             {
                 if (records[i].steps>500){
-                    first_i=i;
-                    printf("steps: %d i: %d %d last i: %d\n", records[i].steps, i, first_i, last_i);
-                };
-               /* if else {
-                    last_i=i;
-                    printf("firsti: %d last i: %d\n",first_i, last_i);   
-                    };*/
-
-                    };
-
-
-                /*first_i=i;
-                for(i=0;i<counter;i++){
-                    last_i=i;
-                    if (period>longest_period){
-                        longest_period=period;
+                    if(newseq==0){
+                       firstnew_i=i;
+                       lastnew_i=i;
+                       newseq=1;
                     }
-                }*/
-
-    
-            //printf("start: %d end: %d period: %d", first_i, last_i, longest_period);
-
-             //   printf("Longest period start: %s %s", records[first_i].date, records[first_i].time);
-               // printf("Longest period end: %s %s", records[last_i].date, records[last_i].time);
-                break;
+                    else{
+                        lastnew_i=i;
+                    }
+                }
+                else {
+                    newseq=0;
+                    if(lastnew_i - firstnew_i > last_i - first_i){
+                        last_i=lastnew_i;
+                        first_i= firstnew_i;
+                    }
+                }
+            }
+            printf("Longest period start: %s %s\n", records[first_i].date, records[first_i].time);
+            printf("Longest period end: %s %s\n", records[last_i].date, records[last_i].time);
+            break;
         };
         case 'Q':
         case 'q': 
@@ -221,10 +187,7 @@ int main()
             printf("%s\n","Invalid choice.Try again.");
             break;
     };
-
-    
-    }
-
+};
     return 0;
 
 }
