@@ -25,6 +25,11 @@ void tokeniseRecord(char *record, char delimiter, char *date, char *time, int *s
     }
 }
 
+int counter=0;
+int i=0;
+int highest_steps=0;
+int largest_i= 0;
+
 
 int main() {
     /*
@@ -43,17 +48,17 @@ int main() {
 
     char line_buffer[buffer_size];
     char filename[buffer_size];
+    //char createfile[buffer_size];
 
     // get filename from the user
-    printf("Enter Filename: ");
+    printf("%s","Enter Filename: ");
 
     // these lines read in a line from the stdin (where the user types)
     // and then takes the actual string out of it
     // this removes any spaces or newlines.
     fgets(line_buffer, buffer_size, stdin);
     sscanf(line_buffer, " %s ", filename);
-
-    counter=0;
+    //sscanf(line_buffer, " %s ", createfile);
 
     FILE *file = fopen(filename, "r");
     if (file == NULL)
@@ -64,20 +69,74 @@ int main() {
 
     while (fgets(line_buffer, buffer_size, file) != NULL) 
     {
-        tokeniseRecord (line_buffer,",", records[counter].date, records[counter].time, records[counter].steps);
+        tokeniseRecord (line_buffer,',', records[counter].date, records[counter].time, &records[counter].steps);
         counter++;
 
-    };
+    }
+
+    //fclose(file);
+    //sort data in descending order- while?
+    //create file
+    //write in file
+    //int main() 
+        char createfile[]= "data.tsv";
+        FILE *newfile = fopen(createfile, "w");
+        if (newfile == NULL) 
+        {
+            perror("Error");
+            return 1;
+        }
+        int descendingorder=0;
+        for (i=0; i<counter; i++)
+        {
+            for (largest_i=i+1; largest_i<counter+1; largest_i++)
+            {
+                if (records[i].steps<records[largest_i].steps)
+                {
+                    highest_steps= records[i].steps;
+                    descendingorder=i;
+                    records[descendingorder].steps= records[largest_i].steps;
+                    records[largest_i].steps= highest_steps;
+                }
+
+                    // para printar no arquivo fprintf(newfile,...)
+            }   
+             
+        }
+        
+        for (descendingorder=0; descendingorder<i; descendingorder++)
+        {
+            printf("%d %d %s\n", records[descendingorder].steps, descendingorder, records[descendingorder].time);
+        }
+
+
+        
+
+
+            
+            
+        
+        
+
+
+
+        //for (i=0;i<counter;i++){
+           // if (records[i].steps>records[i+1].steps){
+             //   fprintf(newfile,"%d\n",records[i].steps);
+           // }
+          //  while (records[i].steps > records.steps)
+            //{
+            //    fprintf(newfile, "%d",records[i].steps);
+
+          //  }
+        //}
+        
 
     fclose(file);
-
-    //sort data in descending order- while?
-
-    //create file
+    
+    return 0;
 
 
-
-    //write in file
 
     //print Data sorted and written to FitnessData_2023.csv.tsv
 }
