@@ -53,7 +53,7 @@ int main()
     char choice;
     int i = 0;
     int counter= 0;
-    int meansteps= 0;
+    float meansteps= 0;
     int stepcount = 0;
 
     while (1)
@@ -144,7 +144,7 @@ int main()
                 meansteps += records[i].steps;
             }
             meansteps /= counter;
-            printf("Mean step count: %d\n", meansteps);
+            printf("Mean step count: %.0f\n", meansteps);
             break;
 
         case 'F': 
