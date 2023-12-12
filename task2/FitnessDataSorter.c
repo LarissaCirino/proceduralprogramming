@@ -25,23 +25,18 @@ void tokeniseRecord(char *record, char delimiter, char *date, char *time, int *s
     }
 }
 
-int counter=0;
-int i=0;
-int lowest_steps=0;
-int largest_i= 0;
-
 
 int main() {
     /*
      andthat all of the data inside the file is in the correct format
       (for example, 12-15-2023,,200 would beinvalid as the time is missing). 
       If the file does not exist or if it contains invalid data, your programshould give a suitable error message, return 1, and exit:Error: invalid file2.
-       If the file exists then your program should read the file into an array, and 
-       sort the data in descendingorder of steps (highest number of steps at the top, smallest number at the bottom). 
-       If two recordshave the same step count, these should be consecutive but the order does not matter.3.
-        Write out the sorted data file with the same filename, but with the file extension .tsv added to it.
-     Once this is complete, return 0 to exit successfully
+
     */
+    int counter=0;
+    int i=0;
+    int lowest_steps=0;
+    int highest_i= 0;
     int buffer_size=10000;
     FITNESS_DATA records[buffer_size]; 
 
@@ -83,34 +78,36 @@ int main() {
     //if (fgets(line_buffer, buffer_size, newfile) == NULL)
 
 
-    int descendingorder=0;
+    int j=0;
     for (i=0; i<counter; i++)
     {
-        for (largest_i=i+1; largest_i<counter+1; largest_i++)
+        for (j=i+1; j<counter+1; j++)
         {
-            if (records[i].steps<records[largest_i].steps)
+            if (records[i].steps<records[j].steps)
             {
+                highest_i=j;
                 lowest_steps= records[i].steps;
-                records[i].steps= records[largest_i].steps;
-                records[largest_i].steps= lowest_steps;
-                //descendingorder=largest_i;
-            }
+                records[i].steps= records[highest_i].steps;
+                records[highest_i].steps= lowest_steps;
+                char time[6];
+                strcpy(time, records[i].time);
+                strcpy(records[i].time, records[highest_i].time);
+                strcpy(records[highest_i].time, time);
+                char date[11];
+                strcpy(date, records[i].date);
+                strcpy(records[i].date, records[highest_i].date);
+                strcpy(records[highest_i].date, date);
+            }   
         }
-    
-    //printf(" steps: %d %s\n", records[i].steps, records[descendingorder].time);
+        
+        fprintf(newfile, "%s\t%s\t%d\n", records[i].date, records[i].time, records[i].steps);
 
     }
-
-    //fprintf(newfile, "%s\t%s\t%d\n", records[i].date, records[i].time, records[i].steps);
-    /*for (descendingorder=0; descendingorder<i; descendingorder++)
-    {
-        printf("%d %d %s\n", records[descendingorder].steps, descendingorder, records[descendingorder].time);
-    }*/
-
-        
-
+    
     fclose(newfile);
     
+    printf("Data sorted and written to %s\n", filename);
+
     return 0;
 
 }
