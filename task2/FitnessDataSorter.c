@@ -62,6 +62,18 @@ int main() {
     while (fgets(line_buffer, buffer_size, file) != NULL) 
     {
         tokeniseRecord (line_buffer,',', records[counter].date, records[counter].time, &records[counter].steps);
+        if (records[counter].date== ""){
+            printf("Error: empty fields\n");
+            return 1;
+        }
+        if (records[counter].time== ""){
+            printf("Error: empty fields\n");
+            return 1;
+        }
+        if (records[counter].steps<=0){
+            printf("Error: bad data\n");
+            return 1;
+        }
         counter++;
 
     }
@@ -72,11 +84,9 @@ int main() {
     FILE *newfile = fopen(filename, "w");
     if (newfile == NULL) 
     {
-        perror("");
+        perror("Error: Invalid File\n");
         return 1;
     }
-    //if (fgets(line_buffer, buffer_size, newfile) == NULL)
-
 
     int j=0;
     for (i=0; i<counter; i++)
